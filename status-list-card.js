@@ -8,7 +8,7 @@
  * for the config reference.
  */
 
-const VERSION = "0.1.1";
+const VERSION = "0.1.2";
 
 const DEFAULT_STATES = ["on", "open", "opening", "closing"];
 
@@ -40,7 +40,7 @@ class StatusListCard extends HTMLElement {
     if (!this.shadowRoot) {
       // One ha-card for the card's lifetime, so styles that themes and
       // card-mod/UIX inject into it survive re-renders.
-      this.attachShadow({ mode: "open" }).innerHTML = `<style>${STYLE}</style><ha-card></ha-card>`;
+      this.attachShadow({ mode: "open" }).innerHTML = `<style>${STYLE}</style><ha-card><div class="body"></div></ha-card>`;
     }
     if (this._hass) this._render(true);
   }
@@ -193,8 +193,11 @@ class StatusListCard extends HTMLElement {
     if (!force && sig === this._sig) return;
     this._sig = sig;
     const card = this.shadowRoot.querySelector("ha-card");
-    card.className = background === "card" ? "card" : "panel";
-    card.innerHTML = html;
+    // Toggle only our own classes and write inside .body: card-mod/UIX add
+    // their own classes and style node to ha-card, which must stay.
+    card.classList.toggle("card", background === "card");
+    card.classList.toggle("panel", background !== "card");
+    this.shadowRoot.querySelector(".body").innerHTML = html;
     // Hide the whole card (and its grid slot) when nothing is active.
     if (this._cfg.hide_when_empty !== false && this.hidden !== empty) {
       this.hidden = empty;
