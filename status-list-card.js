@@ -224,10 +224,13 @@ ha-card.panel .panel {
   -webkit-backdrop-filter: blur(14px); backdrop-filter: blur(14px);
 }
 /* card: the theme's normal card background. */
-/* The theme's glass tint (Frosted Glass sets --ha-card-glass-tint, which the
-   wall panel screensaver deepens), drawn by the card itself so it doesn't depend
-   on the theme's card-mod styles reaching this card. Other themes: their card background. */
-ha-card.card { background: var(--ha-card-glass-tint, var(--ha-card-background, var(--card-background-color))); }
+/* The theme's glass layer, mirrored from Frosted Glass (transparent card, tint
+   on ::before; the wall panel screensaver deepens --ha-card-glass-tint), so it
+   shows even where the theme's card-mod styles don't reach this card. Same
+   pseudo-element as the theme's, so it never doubles up. Other themes: their
+   normal card background. */
+ha-card.card { position: relative; isolation: isolate; background: transparent; }
+ha-card.card::before { content: var(--frosted-glass-card-layer-content, ""); position: absolute; inset: 0; z-index: -1; pointer-events: none; border-radius: inherit; background: var(--ha-card-glass-tint, var(--ha-card-background, var(--card-background-color))); }
 ha-card.card .panel { padding: 12px 14px; }
 ha-icon { display: flex; line-height: 0; }
 .head { display: flex; align-items: center; gap: 10px; }
