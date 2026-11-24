@@ -8,7 +8,7 @@
  * for the config reference.
  */
 
-const VERSION = "0.1.2";
+const VERSION = "0.1.3";
 
 const DEFAULT_STATES = ["on", "open", "opening", "closing"];
 
@@ -224,6 +224,10 @@ ha-card.panel .panel {
   -webkit-backdrop-filter: blur(14px); backdrop-filter: blur(14px);
 }
 /* card: the theme's normal card background. */
+/* The theme's glass tint (Frosted Glass sets --ha-card-glass-tint, which the
+   wall panel screensaver deepens), drawn by the card itself so it doesn't depend
+   on the theme's card-mod styles reaching this card. Other themes: their card background. */
+ha-card.card { background: var(--ha-card-glass-tint, var(--ha-card-background, var(--card-background-color))); }
 ha-card.card .panel { padding: 12px 14px; }
 ha-icon { display: flex; line-height: 0; }
 .head { display: flex; align-items: center; gap: 10px; }
